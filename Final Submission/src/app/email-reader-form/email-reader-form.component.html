@@ -1,0 +1,113 @@
+<p>email-reader-form works!</p>
+<form #emailForm="ngForm" (ngSubmit)="sendForm()">
+    <h3>Fill the details of the Email in the form below: (Blank values set by default)</h3>
+    <label>From:</label>
+    <input  appHighlight type="text" class="form-control" 
+        required style="width: 100px;"  
+        [(ngModel)]="email.From" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+        name="sfrom"
+        #sfrom="ngModel"
+        [ngClass]="sfrom.valid || sfrom.pristine ? '': 'bg-danger'"
+        >
+        <div class="alert alert-danger" *ngIf="sfrom.touched && !sfrom.valid">
+            <div *ngIf="sfrom.errors?.['required']">Email is required.</div>
+            <div *ngIf="sfrom.errors?.['pattern']">Email does not match the required pattern.</div>
+        </div>
+        
+    <br>
+    <label>To:</label>
+    <input appHighlight type="text" class="form-control" 
+    required style="width: 100px;" 
+    [(ngModel)]="email.To" 
+    name="sTo"
+    #sTo="ngModel"
+    [ngClass]="sfrom.valid || sfrom.pristine ? '': 'bg-danger'"
+    pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+    >
+    <div class="alert alert-danger" *ngIf="sTo.touched && !sTo.valid">
+        <div *ngIf="sTo.errors?.['required']">Email is required.</div>
+        <div *ngIf="sTo.errors?.['pattern']">Email does not match the required pattern.</div>
+    </div>
+    <br>
+    <label>Subject:</label>
+    <input appHighlight type="text" class="form-control" 
+    style="width: 600px;" 
+    required
+    minlength="10"
+    maxlength="50"
+    [(ngModel)]="email.Subject" 
+    name="sSubject"
+    #sSubject="ngModel"
+    [ngClass]="sSubject.valid || sSubject.pristine ? '': 'bg-danger'"
+    >
+
+    <div class="alert alert-danger" *ngIf="sSubject.touched && !sSubject.valid">
+        <div *ngIf="sSubject.errors?.['minlength']">Your SUBJECT must be at least 10 characters long.</div>
+        <div *ngIf="sSubject.errors?.['required']">Subject is required.</div>
+        <div *ngIf="sSubject.errors?.['maxlength']">Your SUBJECT cannot exceed 50 characters.</div>        
+    </div>
+    <br>
+    <label>Body:</label>
+    <input appHighlight type="text" class="form-control"  [(ngModel)]="email.Body"
+    name="sBody"
+    #sBody="ngModel"
+    >
+    <br>
+</form>
+<h3>You can see your Email below : (Upto Date Viewer)</h3>
+<p>
+    From: {{ email.From  }} <br>
+    To: {{ email.To  }} <br>
+    Subject: {{ email.Subject  }} <br>
+    Body: {{ email.Body  }} <br>
+</p>
+
+<button (click)="sendForm()" 
+    
+    class="btn btn-success"
+    [disabled]="!emailForm.form.valid"
+    >
+Send
+</button>
+<div class="space">
+</div>
+<button (click)="clear()" 
+    class="btn btn-primary"
+    >
+Reset
+</button>
+<br>
+<br>
+Email In Email List
+<table class="table table-striped">
+<tr>
+    <td>To</td>
+    <td>Subject</td>
+    <td></td>
+</tr>
+<tbody>
+    <tr ng-repeat="email in emailList">
+    <td>{{email.To}}</td>
+    <td>{{email.Subject}}</td>
+    
+</tr>>
+</tbody>
+</table>
+<ng-template #noemail>
+    <br><br>
+    <p><b>The list of emails is empty</b></p>
+</ng-template>
+
+<div *ngIf="emailList; else noemail">
+    <h3>We have a list!! </h3>
+    <ul class="list-group">
+        <li *ngFor="let email of emailList" class="list-group-item">
+            {{email.To}}, {{ email.Subject }}
+        </li>
+    </ul>
+</div>
+
+
+
+
+
